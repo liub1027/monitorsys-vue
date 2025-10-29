@@ -74,21 +74,13 @@
             }
         },
         mounted() {
-            this.getInfo();
+            // 使用静态假数据，不再调用后端API
+            this.init();
         },
         methods:{
-            getInfo(){
-             this.getRequest("/home/getFaultDistribution").then(res=>{
-                 this.init(res);
-             })
-            },
-            init(obj){
+            init(){
                 this.chart = this.$echarts.init(document.getElementById(this.id));
-                this.option.series[0].data=[];
-                this.option.series[0].data[0]=obj[0].num
-                this.option.series[0].data[1]=obj[1].num
-                this.option.series[0].data[2]=obj[2].num
-                this.option.series[0].data[3]=obj[3].num
+                // 直接使用组件中已定义的假数据
                 this.chart.setOption(this.option, true);
                 window.addEventListener("resize", this.chart.resize);
             }

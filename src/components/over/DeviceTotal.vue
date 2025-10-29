@@ -69,20 +69,23 @@
             }
         },
         mounted() {
-            this.getInfo();
+            // 使用假数据替代后端API调用
+            this.initMockData();
         },
         methods:{
-            getInfo(){
-              this.getRequest("/home/getEquipmentStatistics").then(res=>{
-                  this.init(res)
-              })
-            },
-            init(obj){
+            // 模拟设备统计数据
+            initMockData(){
+                let mockData = [
+                    {name: '三层交换机', value: 42},
+                    {name: '二层交换机', value: 68},
+                    {name: '服务器', value: 32},
+                    {name: '路由器', value: 14}
+                ];
                 this.chart = this.$echarts.init(document.getElementById(this.id));
                 this.option.legend.data=[];
-                this.option.series[0].data=obj;
-                for (let i in obj) {
-                    this.option.legend.data.push(obj[i].name);
+                this.option.series[0].data=mockData;
+                for (let i in mockData) {
+                    this.option.legend.data.push(mockData[i].name);
                 }
                 this.chart.setOption(this.option, true);
                 window.addEventListener("resize", this.chart.resize);

@@ -69,13 +69,18 @@
             }
         },
         mounted() {
-            this.getInfo();
+            // 使用假数据替代后端API调用
+            this.initMockData();
         },
         methods: {
-            getInfo(){
-              this.getRequest("/home/getInformationStatistics").then(res=>{
-                  this.init(res);
-              })
+            // 模拟后端数据
+            initMockData(){
+                let mockData = {
+                    equipmentNums: 156,  // 设备总数
+                    pointsNums: 1256,   // 监测点数
+                    faultNums: 12       // 故障总数
+                };
+                this.init(mockData);
             },
             init(obj) {
                 console.log(obj);

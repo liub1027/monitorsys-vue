@@ -27,13 +27,19 @@
             }
         },
         mounted(){
-            this.getInfo()
+            // 使用假数据替代后端API调用
+            this.initMockData();
         },
         methods:{
-          getInfo(){
-              this.getRequest("/home/getNewDiagnosis").then(res=>{
-                 this.gLog = res;
-              })
+          // 模拟未处理诊断信息数据
+          initMockData(){
+              this.gLog = [
+                  {ip: '192.168.1.101', rank: '危险', time: '2023-06-15 14:30:22'},
+                  {ip: '192.168.1.102', rank: '警告', time: '2023-06-15 14:25:15'},
+                  {ip: '192.168.1.103', rank: '危险', time: '2023-06-15 14:20:45'},
+                  {ip: '192.168.1.104', rank: '警告', time: '2023-06-15 14:15:30'},
+                  {ip: '192.168.1.105', rank: '警告', time: '2023-06-15 14:10:12'}
+              ];
           }
         }
     }

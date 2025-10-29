@@ -69,21 +69,25 @@
             }
         },
         mounted() {
-            this.getInfo();
+            // 使用假数据替代后端API调用
+            this.initMockData();
         },
         methods:{
-            getInfo(){
-              this.getRequest("/home/getPointsStatistics").then(res=>{
-                  this.init(res);
-              })
-            },
-            init(obj){
-                console.log(obj);
+            // 模拟监测点统计数据
+            initMockData(){
+                let mockData = [
+                    {name: '温度监测点', value: 356},
+                    {name: '湿度监测点', value: 289},
+                    {name: '压力监测点', value: 142},
+                    {name: '流量监测点', value: 218},
+                    {name: '电压监测点', value: 125},
+                    {name: '电流监测点', value: 126}
+                ];
                 this.chart = this.$echarts.init(document.getElementById(this.id));
                 this.option.legend.data=[];
-                this.option.series[0].data=obj;
-                for (let i in obj) {
-                    this.option.legend.data.push(obj[i].name);
+                this.option.series[0].data=mockData;
+                for (let i in mockData) {
+                    this.option.legend.data.push(mockData[i].name);
                 }
                 this.chart.setOption(this.option, true);
                 window.addEventListener("resize", this.chart.resize);

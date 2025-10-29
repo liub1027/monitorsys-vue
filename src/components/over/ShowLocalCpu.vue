@@ -77,22 +77,26 @@
             }
         },
         mounted() {
-            this.getInfo();
+            // 使用假数据替代后端API调用
+            this.initMockData();
         },
         methods:{
-            getInfo(){
-              this.getRequest("/home/getCpu").then(res=>{
-                  this.init(res);
-              })
-            },
-            init(obj){
-                this.chart = this.$echarts.init(document.getElementById(this.id));
-                this.option.xAxis.data=[];
-                this.option.series[0].data=[];
-                for (let i=obj.length-1;i>=0;i--) {
-                    this.option.xAxis.data.push(obj[i].time);
-                    this.option.series[0].data.push(obj[i].cpuRate);
+            // 模拟CPU使用率数据
+            initMockData(){
+                // 生成过去12小时的时间点和随机CPU使用率
+                let times = [];
+                let cpuRates = [];
+                
+                for (let i = 11; i >= 0; i--) {
+                    let now = new Date();
+                    now.setHours(now.getHours() - i);
+                    times.push(`${now.getHours()}:00`);
+                    cpuRates.push(Math.floor(Math.random() * 60) + 10); // 10-70%之间的随机使用率
                 }
+                
+                this.chart = this.$echarts.init(document.getElementById(this.id));
+                this.option.xAxis.data = times;
+                this.option.series[0].data = cpuRates;
                 this.chart.setOption(this.option, true);
                 window.addEventListener("resize", this.chart.resize);
             }

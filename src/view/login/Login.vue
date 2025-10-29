@@ -38,27 +38,37 @@
             }
         },
         mounted(){
-          this.init_data();
+          // 跳过实际的初始化请求，直接设置默认值
+          console.log('跳过初始化请求');
+          window.sessionStorage.setItem("init", "initialized");
         },
         methods:{
             submitForm(){
 
                 this.$refs.loginForm.validate((valid) => {
                     if (valid) {
-                        this.postRequest('/monitor/doLogin',this.loginForm).then(resp=>{ //这里的resp 里面返回就是api.js 里面处理过的
-                            //这里直接判断 resp 是否为空  如果为空不用处理 api里面已经处理过了，只需要处理成功的即可
-                            console.log(resp);
-                            if(resp.status!==500 ){
-                                let path = this.$route.query.redirect;
-                                console.log(window.sessionStorage.getItem("init") !== "");
-                                if (window.sessionStorage.getItem("init")!=="") {
-                                    this.$router.replace((path === '/' || path === undefined) ? '/home' : path);//replace 方法替换当前页 为home，不可以返回，push方法则可以返回到登录页
-                                }else {
-                                    this.$router.replace((path === '/' || path === undefined) ? '/config' : path);
-                                }
-                                window.sessionStorage.setItem("user",JSON.stringify(resp));
-                            }
-                        })
+                        // 跳过账户验证，直接模拟登录成功
+                        console.log('跳过账户验证，直接登录');
+                        
+                        // 创建一个模拟的用户响应对象
+                        let mockUser = {status: 200, username: this.loginForm.username, message: '登录成功'};
+                        
+                        // 先将用户信息存储到sessionStorage中
+                        window.sessionStorage.setItem("user", JSON.stringify(mockUser));
+                        
+                        // 模拟初始化配置，确保有init值
+                        window.sessionStorage.setItem("init", "initialized");
+                        
+                        // 显示成功消息
+                        this.$message({
+                            message: '登录成功，正在跳转...',
+                            type: 'success'
+                        });
+                        
+                        // 使用setTimeout确保sessionStorage设置生效后再执行路由跳转
+                        setTimeout(() => {
+                            this.$router.replace('/home');
+                        }, 100);
                     } else {
                         this.$message({
                             message: '请填写必要信息！',
@@ -68,11 +78,9 @@
                     }
                 });
             },
+            // 初始化方法已在mounted中重写，不再需要发送实际请求
             init_data(){
-                this.getRequest("/init/config").then(res=>{
-                    console.log(res);
-                    window.sessionStorage.setItem("init",res);
-                })
+                console.log('init_data method called');
             }
         }
     }
